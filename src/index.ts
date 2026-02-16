@@ -46,6 +46,7 @@ import { ToolExport as DeleteTemplate } from "./tools/templates/delete-template.
 // ── Utility ─────────────────────────────────────────────────
 import { ToolExport as EstimateCost } from "./tools/utility/estimate-cost.js";
 import { ToolExport as AccountSummary } from "./tools/utility/account-summary.js";
+import { ToolExport as UploadPdf } from "./tools/utility/upload-pdf.js";
 
 // ── All tools ───────────────────────────────────────────────
 
@@ -85,6 +86,7 @@ const allTools = [
   // Utility
   EstimateCost,
   AccountSummary,
+  UploadPdf,
 ];
 
 function registerAllTools() {

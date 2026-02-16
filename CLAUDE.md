@@ -10,6 +10,7 @@ src/
     postgrid-client-base.ts    # Abstract HTTP client (auth, timeouts, mode detection)
     postgrid-print-client.ts   # Print & Mail API client
     postgrid-verify-client.ts  # Address Verification API client
+    r2-client.ts               # Cloudflare R2 client for PDF upload (presigned URLs)
   helpers/
     register-tool.ts           # RegisterTool() wrapper
     format-error.ts            # Error → string formatting
@@ -23,7 +24,7 @@ src/
     bank-accounts/             # 4 tools: create, get, list, delete
     cheques/                   # 4 tools: create, get, list, cancel
     templates/                 # 5 tools: create, get, list, update, delete
-    utility/                   # 2 tools: estimate-cost, account-summary
+    utility/                   # 3 tools: upload-pdf, estimate-cost, account-summary
   types/
     tool-definition.ts         # ToolDefinition interface
     postgrid.types.ts          # PostGrid API response types
@@ -50,3 +51,7 @@ npm run build   # tsc → dist/
 - `POSTGRID_PRINT_API_KEY` — Print & Mail API key (required for most tools)
 - `POSTGRID_VERIFY_API_KEY` — Address Verification API key (required for verify tools)
 - `POSTGRID_CONFIRM_LIVE_MODE=true` — Required when using live keys
+- `R2_ACCESS_KEY_ID` — Cloudflare R2 access key (optional, for PDF upload)
+- `R2_SECRET_ACCESS_KEY` — Cloudflare R2 secret key (optional, for PDF upload)
+- `R2_ENDPOINT` — R2 S3-compatible endpoint URL (optional, for PDF upload)
+- `R2_BUCKET` — R2 bucket name (optional, for PDF upload)

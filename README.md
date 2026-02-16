@@ -2,7 +2,7 @@
 
 MCP server for PostGrid Print & Mail and Address Verification APIs. Send letters (standard, certified, certified with return receipt), mail MICR-encoded checks, manage contacts and templates, and verify US/Canadian addresses — all from Claude.
 
-## Tools (28)
+## Tools (29)
 
 ### Contacts
 - `postgrid_create_contact` — Create a mailing contact
@@ -43,6 +43,7 @@ MCP server for PostGrid Print & Mail and Address Verification APIs. Send letters
 - `postgrid_delete_template` — Delete a template
 
 ### Utility
+- `postgrid_upload_pdf` — Upload a PDF to temporary storage (Cloudflare R2) and get a URL for PostGrid
 - `postgrid_estimate_cost` — Estimate mailing cost without an API call
 - `postgrid_account_summary` — Show API mode, connectivity, and rate table
 
@@ -82,6 +83,17 @@ POSTGRID_CONFIRM_LIVE_MODE=true
 
 This prevents accidental sends with real postage.
 
+**PDF upload (optional)** — To use `postgrid_upload_pdf`, configure Cloudflare R2:
+
+```bash
+R2_ACCESS_KEY_ID=your_r2_access_key
+R2_SECRET_ACCESS_KEY=your_r2_secret_key
+R2_ENDPOINT=https://<account_id>.r2.cloudflarestorage.com
+R2_BUCKET=postgrid-pdfs
+```
+
+Create an R2 bucket in your Cloudflare dashboard and add a lifecycle rule to auto-delete objects after 1 day.
+
 ### 4. Add to Claude
 
 **Claude Code** (`~/.claude.json`):
@@ -94,7 +106,11 @@ This prevents accidental sends with real postage.
       "args": ["/full/path/to/postgrid-mcp-server/dist/index.js"],
       "env": {
         "POSTGRID_PRINT_API_KEY": "test_sk_...",
-        "POSTGRID_VERIFY_API_KEY": "test_sk_..."
+        "POSTGRID_VERIFY_API_KEY": "test_sk_...",
+        "R2_ACCESS_KEY_ID": "your_r2_access_key",
+        "R2_SECRET_ACCESS_KEY": "your_r2_secret_key",
+        "R2_ENDPOINT": "https://<account_id>.r2.cloudflarestorage.com",
+        "R2_BUCKET": "postgrid-pdfs"
       }
     }
   }
@@ -111,7 +127,11 @@ This prevents accidental sends with real postage.
       "args": ["/full/path/to/postgrid-mcp-server/dist/index.js"],
       "env": {
         "POSTGRID_PRINT_API_KEY": "test_sk_...",
-        "POSTGRID_VERIFY_API_KEY": "test_sk_..."
+        "POSTGRID_VERIFY_API_KEY": "test_sk_...",
+        "R2_ACCESS_KEY_ID": "your_r2_access_key",
+        "R2_SECRET_ACCESS_KEY": "your_r2_secret_key",
+        "R2_ENDPOINT": "https://<account_id>.r2.cloudflarestorage.com",
+        "R2_BUCKET": "postgrid-pdfs"
       }
     }
   }
