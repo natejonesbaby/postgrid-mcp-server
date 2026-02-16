@@ -20,7 +20,7 @@ export const ToolExport: ToolDefinition = {
     doubleSided: z.boolean().optional().describe("Print double-sided (default: false)"),
     envelopeType: z.string().optional().describe("Envelope type (e.g., 'standard_window', 'standard_double_window')"),
     sendDate: z.string().optional().describe("Scheduled send date in YYYY-MM-DD format"),
-    addressPlacement: z.string().optional().describe("Where to print the address: 'top_first_page' (default, overlays address on page 1) or 'insert_blank_page' (adds a separate address page, preserving your PDF content). Use 'insert_blank_page' when uploading pre-formatted PDFs like IRS forms."),
+    addressPlacement: z.string().optional().describe("Where to print the address: 'top_first_page' (overlays address on page 1) or 'insert_blank_page' (adds a separate address page, preserving your content). Automatically defaults to 'insert_blank_page' when uploadedPDF is provided, since PDFs are pre-formatted and the overlay would cover existing content. Defaults to 'top_first_page' for HTML/template content."),
     description: z.string().optional().describe("Internal description"),
     mergeVariables: z.record(z.string()).optional().describe("Template merge variables as key-value pairs"),
     confirmed: z.boolean().optional().describe("Set to true to confirm and send. Without this, only a preview is returned."),
@@ -29,6 +29,7 @@ export const ToolExport: ToolDefinition = {
     try {
       const mode = printClient.getModePrefix();
       const mc = args.mailingClass || "first_class";
+      const ap = args.addressPlacement || (args.uploadedPDF ? "insert_blank_page" : undefined);
 
       // Estimate cost
       const cost = estimateCost({ type: "letter", mailingClass: mc, color: args.color });
@@ -42,7 +43,7 @@ export const ToolExport: ToolDefinition = {
           `Class:    ${mc}`,
           `Color:    ${args.color ? "Yes" : "No"}`,
           `Content:  ${args.html ? "HTML" : args.template ? `Template ${args.template}` : args.uploadedPDF ? "PDF" : "Not specified"}`,
-          args.addressPlacement ? `Address:  ${args.addressPlacement}` : null,
+          ap ? `Address:  ${ap}` : null,
           `Est Cost: $${cost.perUnit.toFixed(2)}`,
           args.sendDate ? `Send Date: ${args.sendDate}` : null,
           `==========================================`,
@@ -67,7 +68,7 @@ export const ToolExport: ToolDefinition = {
       if (args.doubleSided !== undefined) body.doubleSided = args.doubleSided;
       if (args.envelopeType) body.envelopeType = args.envelopeType;
       if (args.sendDate) body.sendDate = args.sendDate;
-      if (args.addressPlacement) body.addressPlacement = args.addressPlacement;
+      if (ap) body.addressPlacement = ap;
       if (args.description) body.description = args.description;
       if (args.mergeVariables) body.mergeVariables = args.mergeVariables;
 
