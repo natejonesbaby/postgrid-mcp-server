@@ -151,7 +151,7 @@ Create an R2 bucket in your Cloudflare dashboard and add a lifecycle rule to aut
 
 **Account number masking** — Bank account and routing numbers are masked in all responses.
 
-**Idempotency** — Create operations include deterministic idempotency keys so retries don't produce duplicates.
+**Idempotency** — Create operations include unique idempotency keys so network retries don't produce duplicates.
 
 ## Rate Table
 

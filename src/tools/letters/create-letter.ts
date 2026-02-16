@@ -1,7 +1,7 @@
 import { printClient } from "../../clients/postgrid-print-client.js";
 import { formatError } from "../../helpers/format-error.js";
 import { estimateCost } from "../../helpers/cost-estimator.js";
-import { generateIdempotencyKey } from "../../helpers/idempotency.js";
+import { randomUUID } from "node:crypto";
 import { ToolDefinition } from "../../types/tool-definition.js";
 import { PostGridLetter } from "../../types/postgrid.types.js";
 import { z } from "zod";
@@ -68,10 +68,7 @@ export const ToolExport: ToolDefinition = {
       if (args.description) body.description = args.description;
       if (args.mergeVariables) body.mergeVariables = args.mergeVariables;
 
-      const idempotencyKey = generateIdempotencyKey("letter", {
-        to: args.to, from: args.from, mailingClass: mc,
-        html: args.html, template: args.template, pdf: args.uploadedPDF,
-      });
+      const idempotencyKey = randomUUID();
 
       const letter = await printClient.post<PostGridLetter>("/letters", body, idempotencyKey);
 

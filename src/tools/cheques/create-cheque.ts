@@ -2,7 +2,7 @@ import { printClient } from "../../clients/postgrid-print-client.js";
 import { formatError } from "../../helpers/format-error.js";
 import { dollarsToCents, centsToDollars } from "../../helpers/format-money.js";
 import { estimateCost } from "../../helpers/cost-estimator.js";
-import { generateIdempotencyKey } from "../../helpers/idempotency.js";
+import { randomUUID } from "node:crypto";
 import { ToolDefinition } from "../../types/tool-definition.js";
 import { PostGridCheque } from "../../types/postgrid.types.js";
 import { z } from "zod";
@@ -83,10 +83,7 @@ export const ToolExport: ToolDefinition = {
       if (args.letterHTML) body.letterHTML = args.letterHTML;
       if (args.letterTemplate) body.letterTemplate = args.letterTemplate;
 
-      const idempotencyKey = generateIdempotencyKey("cheque", {
-        to: args.to, from: args.from, bankAccount: args.bankAccount,
-        amount: amountCents, memo: args.memo,
-      });
+      const idempotencyKey = randomUUID();
 
       const cheque = await printClient.post<PostGridCheque>("/cheques", body, idempotencyKey);
 

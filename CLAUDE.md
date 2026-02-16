@@ -16,7 +16,6 @@ src/
     format-error.ts            # Error → string formatting
     format-money.ts            # String-based dollar↔cents conversion
     cost-estimator.ts          # Offline rate table and cost estimation
-    idempotency.ts             # Deterministic SHA-256 idempotency keys
   tools/
     contacts/                  # 5 tools: create, get, list, update, delete
     verification/              # 4 tools: verify, batch, autocomplete, lookup
