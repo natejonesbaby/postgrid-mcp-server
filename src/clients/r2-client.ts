@@ -67,14 +67,15 @@ class R2Client {
     const bucket = this.getBucket();
     const key = `pdfs/${randomUUID()}.pdf`;
 
+    // Only sign ContentType — CacheControl and ContentDisposition are omitted
+    // because they become signed headers that the caller must reproduce exactly,
+    // which causes SignatureDoesNotMatch errors with curl uploads.
     const putUrl = await getSignedUrl(
       client,
       new PutObjectCommand({
         Bucket: bucket,
         Key: key,
         ContentType: "application/pdf",
-        CacheControl: "no-store, max-age=0",
-        ContentDisposition: 'inline; filename="document.pdf"',
       }),
       { expiresIn: PRESIGNED_URL_EXPIRY_SECONDS }
     );
