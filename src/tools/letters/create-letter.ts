@@ -60,7 +60,7 @@ export const ToolExport: ToolDefinition = {
 
       if (args.html) body.html = args.html;
       if (args.template) body.template = args.template;
-      if (args.uploadedPDF) body.uploadedPDF = args.uploadedPDF;
+      if (args.uploadedPDF) body.pdf = args.uploadedPDF;
       if (args.color !== undefined) body.color = args.color;
       if (args.doubleSided !== undefined) body.doubleSided = args.doubleSided;
       if (args.envelopeType) body.envelopeType = args.envelopeType;
