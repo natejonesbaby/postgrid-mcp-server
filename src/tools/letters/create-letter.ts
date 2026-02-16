@@ -70,6 +70,7 @@ export const ToolExport: ToolDefinition = {
 
       const idempotencyKey = generateIdempotencyKey("letter", {
         to: args.to, from: args.from, mailingClass: mc,
+        html: args.html, template: args.template, pdf: args.uploadedPDF,
       });
 
       const letter = await printClient.post<PostGridLetter>("/letters", body, idempotencyKey);
