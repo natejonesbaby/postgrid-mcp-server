@@ -2,7 +2,7 @@
 
 MCP server for PostGrid Print & Mail and Address Verification APIs. Send letters (standard, certified, certified with return receipt), mail MICR-encoded checks, manage contacts and templates, and verify US/Canadian addresses — all from Claude.
 
-## Tools (29)
+## Tools (30)
 
 ### Contacts
 - `postgrid_create_contact` — Create a mailing contact
@@ -44,6 +44,7 @@ MCP server for PostGrid Print & Mail and Address Verification APIs. Send letters
 
 ### Utility
 - `postgrid_upload_pdf` — Upload a PDF to temporary storage (Cloudflare R2) and get a URL for PostGrid
+- `postgrid_get_upload_url` — Get a presigned PUT/GET URL pair for direct-to-R2 PDF upload (for Cowork/sandboxed environments)
 - `postgrid_estimate_cost` — Estimate mailing cost without an API call
 - `postgrid_account_summary` — Show API mode, connectivity, and rate table
 

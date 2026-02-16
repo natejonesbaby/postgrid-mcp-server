@@ -36,6 +36,10 @@ class R2Client {
       },
     });
 
+    // Scrub from process.env to prevent leakage
+    delete process.env.R2_ACCESS_KEY_ID;
+    delete process.env.R2_SECRET_ACCESS_KEY;
+
     return this.#client;
   }
 
@@ -47,6 +51,41 @@ class R2Client {
       throw new Error("R2 bucket not configured");
     }
     return this.#bucket;
+  }
+
+  /**
+   * Generate presigned PUT and GET URLs for direct-to-R2 upload.
+   * The caller uploads the file directly to R2 using the PUT URL,
+   * then uses the GET URL as the `uploadedPDF` parameter in PostGrid.
+   */
+  async generatePresignedPutUrl(): Promise<{
+    key: string;
+    putUrl: string;
+    getUrl: string;
+  }> {
+    const client = this.getClient();
+    const bucket = this.getBucket();
+    const key = `pdfs/${randomUUID()}.pdf`;
+
+    const putUrl = await getSignedUrl(
+      client,
+      new PutObjectCommand({
+        Bucket: bucket,
+        Key: key,
+        ContentType: "application/pdf",
+        CacheControl: "no-store, max-age=0",
+        ContentDisposition: 'inline; filename="document.pdf"',
+      }),
+      { expiresIn: PRESIGNED_URL_EXPIRY_SECONDS }
+    );
+
+    const getUrl = await getSignedUrl(
+      client,
+      new GetObjectCommand({ Bucket: bucket, Key: key }),
+      { expiresIn: PRESIGNED_URL_EXPIRY_SECONDS }
+    );
+
+    return { key, putUrl, getUrl };
   }
 
   /**

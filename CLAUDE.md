@@ -24,7 +24,7 @@ src/
     bank-accounts/             # 4 tools: create, get, list, delete
     cheques/                   # 4 tools: create, get, list, cancel
     templates/                 # 5 tools: create, get, list, update, delete
-    utility/                   # 3 tools: upload-pdf, estimate-cost, account-summary
+    utility/                   # 4 tools: upload-pdf, get-upload-url, estimate-cost, account-summary
   types/
     tool-definition.ts         # ToolDefinition interface
     postgrid.types.ts          # PostGrid API response types
