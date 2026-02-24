@@ -21,7 +21,7 @@ export const ToolExport: ToolDefinition = {
     phoneNumber: z.string().optional().describe("Phone number"),
     description: z.string().optional().describe("Internal description/notes"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const contact = await printClient.post<PostGridContact>("/contacts", {
         firstName: args.firstName,

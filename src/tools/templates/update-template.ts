@@ -12,13 +12,13 @@ export const ToolExport: ToolDefinition = {
     html: z.string().optional().describe("Updated HTML content"),
     description: z.string().optional().describe("Updated description"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const body: Record<string, string> = {};
-      if (args.html) body.html = args.html;
-      if (args.description) body.description = args.description;
+      if (args.html) body.html = args.html as string;
+      if (args.description) body.description = args.description as string;
 
-      const template = await printClient.post<PostGridTemplate>(`/templates/${args.id}`, body);
+      const template = await printClient.post<PostGridTemplate>(`/templates/${args.id as string}`, body);
       const mode = printClient.getModePrefix();
 
       return {

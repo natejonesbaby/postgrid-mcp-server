@@ -10,7 +10,7 @@ export const ToolExport: ToolDefinition = {
   schema: {
     id: z.string().describe("Template ID (e.g., 'template_xxx')"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const template = await printClient.get<PostGridTemplate>(`/templates/${args.id}`);
       const mode = printClient.getModePrefix();

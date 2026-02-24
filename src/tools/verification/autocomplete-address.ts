@@ -10,7 +10,7 @@ export const ToolExport: ToolDefinition = {
     partialAddress: z.string().describe("Partial street address to autocomplete"),
     countryCode: z.string().optional().describe("Country code filter (default: 'US')"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const result = await verifyClient.post<any>("/addver/completions", {
         address: args.partialAddress,

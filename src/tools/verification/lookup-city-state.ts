@@ -10,7 +10,7 @@ export const ToolExport: ToolDefinition = {
     postalOrZip: z.string().describe("ZIP or postal code to look up"),
     countryCode: z.string().optional().describe("Country code (default: 'US')"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const result = await verifyClient.post<any>("/addver/lookups", {
         postalOrZip: args.postalOrZip,

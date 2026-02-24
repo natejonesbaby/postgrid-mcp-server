@@ -9,7 +9,7 @@ export const ToolExport: ToolDefinition = {
   schema: {
     id: z.string().describe("Cheque ID to cancel"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       await printClient.post(`/cheques/${args.id}/cancel`, {});
       const mode = printClient.getModePrefix();

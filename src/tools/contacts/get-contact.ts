@@ -10,7 +10,7 @@ export const ToolExport: ToolDefinition = {
   schema: {
     id: z.string().describe("Contact ID (e.g., 'contact_xxx')"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const contact = await printClient.get<PostGridContact>(`/contacts/${args.id}`);
       const mode = printClient.getModePrefix();

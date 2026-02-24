@@ -16,7 +16,7 @@ export const ToolExport: ToolDefinition = {
     signatureImage: z.string().optional().describe("URL to signature image"),
     description: z.string().optional().describe("Internal description"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const body: Record<string, any> = {
         bankName: args.bankName,
@@ -34,7 +34,7 @@ export const ToolExport: ToolDefinition = {
       return {
         content: [{
           type: "text" as const,
-          text: `${mode} Bank account created.\n\nID: ${account.id}\nBank: ${account.bankName}\nAccount: ****${args.accountNumber.slice(-4)}\nRouting: ****${args.routingNumber.slice(-4)}\n\nUse this bank account ID when creating checks.`,
+          text: `${mode} Bank account created.\n\nID: ${account.id}\nBank: ${account.bankName}\nAccount: ***${(args.accountNumber as string).slice(-4)}\nRouting: ***${(args.routingNumber as string).slice(-4)}\n\nUse this bank account ID when creating checks.`,
         }],
       };
     } catch (error) {

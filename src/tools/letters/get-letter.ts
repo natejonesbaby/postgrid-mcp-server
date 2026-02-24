@@ -10,7 +10,7 @@ export const ToolExport: ToolDefinition = {
   schema: {
     id: z.string().describe("Letter ID (e.g., 'letter_xxx')"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const letter = await printClient.get<PostGridLetter>(`/letters/${args.id}`);
       const mode = printClient.getModePrefix();

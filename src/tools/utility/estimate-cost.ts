@@ -12,13 +12,13 @@ export const ToolExport: ToolDefinition = {
     pageCount: z.number().optional().describe("Number of pages (default: 1, letters only)"),
     quantity: z.number().optional().describe("Number of items to send (default: 1)"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     const estimate = estimateCost({
-      type: args.type,
-      mailingClass: args.mailingClass,
-      color: args.color,
-      pageCount: args.pageCount,
-      quantity: args.quantity,
+      type: args.type as "letter" | "cheque",
+      mailingClass: args.mailingClass as string | undefined,
+      color: args.color as boolean | undefined,
+      pageCount: args.pageCount as number | undefined,
+      quantity: args.quantity as number | undefined,
     });
 
     return {

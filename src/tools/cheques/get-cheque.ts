@@ -11,7 +11,7 @@ export const ToolExport: ToolDefinition = {
   schema: {
     id: z.string().describe("Cheque ID (e.g., 'cheque_xxx')"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const cheque = await printClient.get<PostGridCheque>(`/cheques/${args.id}`);
       const mode = printClient.getModePrefix();

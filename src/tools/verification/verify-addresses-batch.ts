@@ -16,9 +16,9 @@ export const ToolExport: ToolDefinition = {
       countryCode: z.string().optional().describe("Country code (default: 'US')"),
     })).describe("Array of addresses to verify (max 2,000)"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
-      const addresses: any[] = args.addresses;
+      const addresses = args.addresses as Array<Record<string, string>>;
       if (addresses.length > 2000) {
         return { content: [{ type: "text" as const, text: "Error: Maximum 2,000 addresses per batch." }] };
       }

@@ -25,14 +25,14 @@ export const ToolExport: ToolDefinition = {
     mergeVariables: z.record(z.string()).optional().describe("Template merge variables as key-value pairs"),
     confirmed: z.boolean().optional().describe("Set to true to confirm and send. Without this, only a preview is returned."),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const mode = printClient.getModePrefix();
-      const mc = args.mailingClass || "first_class";
-      const ap = args.addressPlacement || (args.uploadedPDF ? "insert_blank_page" : undefined);
+      const mc = (args.mailingClass as string | undefined) || "first_class";
+      const ap = (args.addressPlacement as string | undefined) || (args.uploadedPDF ? "insert_blank_page" : undefined);
 
       // Estimate cost
-      const cost = estimateCost({ type: "letter", mailingClass: mc, color: args.color });
+      const cost = estimateCost({ type: "letter", mailingClass: mc, color: args.color as boolean | undefined });
 
       // If not confirmed, return preview
       if (!args.confirmed) {

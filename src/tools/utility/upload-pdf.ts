@@ -13,20 +13,30 @@ export const ToolExport: ToolDefinition = {
     "Use this before postgrid_create_letter when you have a PDF file to mail. " +
     "Accepts either a local file path or base64-encoded PDF content. " +
     "The URL expires after 5 minutes and the file is auto-deleted after 24 hours.",
-  schema: {
-    filePath: z
-      .string()
-      .optional()
-      .describe(
-        "Absolute path to a local PDF file. Use this from Claude Code or other file-system-accessible environments."
-      ),
-    base64: z
-      .string()
-      .optional()
-      .describe(
-        "Base64-encoded PDF content. Use this from Cowork or sandboxed environments where file system access is unavailable."
-      ),
-  },
+  // In HTTP mode (Railway), filePath is removed entirely: local paths don't exist on the container
+  // and exposing readFile() via an authenticated HTTP endpoint is a container file read vulnerability.
+  schema: process.env.MCP_TRANSPORT === "http"
+    ? {
+        base64: z
+          .string()
+          .describe(
+            "Base64-encoded PDF content. Required in HTTP/Railway mode."
+          ),
+      }
+    : {
+        filePath: z
+          .string()
+          .optional()
+          .describe(
+            "Absolute path to a local PDF file. Use this from Claude Code or other file-system-accessible environments."
+          ),
+        base64: z
+          .string()
+          .optional()
+          .describe(
+            "Base64-encoded PDF content. Use this from Cowork or sandboxed environments where file system access is unavailable."
+          ),
+      },
   annotations: {
     readOnlyHint: false,
     destructiveHint: false,

@@ -9,7 +9,7 @@ export const ToolExport: ToolDefinition = {
   schema: {
     id: z.string().describe("Contact ID to delete"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       await printClient.delete(`/contacts/${args.id}`);
       const mode = printClient.getModePrefix();

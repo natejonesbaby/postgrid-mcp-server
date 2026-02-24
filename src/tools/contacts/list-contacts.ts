@@ -12,12 +12,12 @@ export const ToolExport: ToolDefinition = {
     skip: z.number().optional().describe("Number of records to skip (default: 0)"),
     limit: z.number().optional().describe("Maximum records to return (default: 10, max: 100)"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const result = await printClient.get<PostGridListResponse<PostGridContact>>("/contacts", {
-        search: args.search,
-        skip: args.skip ?? 0,
-        limit: Math.min(args.limit ?? 10, 100),
+        search: args.search as string | undefined,
+        skip: (args.skip as number | undefined) ?? 0,
+        limit: Math.min((args.limit as number | undefined) ?? 10, 100),
       });
 
       const mode = printClient.getModePrefix();

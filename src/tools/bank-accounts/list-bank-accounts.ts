@@ -11,11 +11,11 @@ export const ToolExport: ToolDefinition = {
     skip: z.number().optional().describe("Records to skip (default: 0)"),
     limit: z.number().optional().describe("Max records (default: 10, max: 100)"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const result = await printClient.get<PostGridListResponse<PostGridBankAccount>>("/bank_accounts", {
-        skip: args.skip ?? 0,
-        limit: Math.min(args.limit ?? 10, 100),
+        skip: (args.skip as number | undefined) ?? 0,
+        limit: Math.min((args.limit as number | undefined) ?? 10, 100),
       });
 
       const mode = printClient.getModePrefix();

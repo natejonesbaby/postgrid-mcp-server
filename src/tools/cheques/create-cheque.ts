@@ -24,38 +24,40 @@ export const ToolExport: ToolDefinition = {
     letterTemplate: z.string().optional().describe("Template ID for an accompanying letter"),
     confirmed: z.boolean().optional().describe("Set to true to confirm and send. Without this, only a preview is returned."),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const mode = printClient.getModePrefix();
+      const amount = args.amount as number;
+      const memo = args.memo as string | undefined;
 
       // Validate amount
-      if (args.amount <= 0) {
+      if (amount <= 0) {
         return { content: [{ type: "text" as const, text: "Error: Check amount must be greater than $0." }] };
       }
-      if (args.amount > 100_000) {
+      if (amount > 100_000) {
         return { content: [{ type: "text" as const, text: "Error: Check amount exceeds $100,000 safety threshold. Please process large checks manually via the PostGrid dashboard." }] };
       }
 
       // Convert dollars to cents (string-based to avoid floating-point errors)
-      const amountCents = dollarsToCents(args.amount);
+      const amountCents = dollarsToCents(amount);
       const amountFormatted = centsToDollars(amountCents);
       const cost = estimateCost({ type: "cheque" });
 
       // Validate memo length
-      if (args.memo && args.memo.length > 40) {
+      if (memo && memo.length > 40) {
         return { content: [{ type: "text" as const, text: "Error: Memo cannot exceed 40 characters." }] };
       }
 
       // If not confirmed, return preview
       if (!args.confirmed) {
-        const largeWarning = args.amount > 10_000 ? "\n⚠ WARNING: Large check amount (> $10,000)" : "";
+        const largeWarning = amount > 10_000 ? "\n⚠ WARNING: Large check amount (> $10,000)" : "";
         const preview = [
           `=== CONFIRM: Send Check (${mode}) ===`,
           `To:       ${args.to}`,
           `From:     ${args.from}`,
           `Bank:     ${args.bankAccount}`,
           `Amount:   ${amountFormatted} (${amountCents} cents)`,
-          args.memo ? `Memo:     ${args.memo}` : null,
+          memo ? `Memo:     ${memo}` : null,
           `Est Cost: $${cost.perUnit.toFixed(2)}`,
           args.sendDate ? `Send Date: ${args.sendDate}` : null,
           `========================================`,
@@ -75,7 +77,7 @@ export const ToolExport: ToolDefinition = {
         amount: amountCents,
       };
 
-      if (args.memo) body.memo = args.memo;
+      if (memo) body.memo = memo;
       if (args.number !== undefined) body.number = args.number;
       if (args.mailingClass) body.mailingClass = args.mailingClass;
       if (args.sendDate) body.sendDate = args.sendDate;

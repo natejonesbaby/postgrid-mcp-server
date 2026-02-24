@@ -22,7 +22,7 @@ export const ToolExport: ToolDefinition = {
     phoneNumber: z.string().optional().describe("Updated phone"),
     description: z.string().optional().describe("Updated description"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const { id, ...updates } = args;
       // Remove undefined values

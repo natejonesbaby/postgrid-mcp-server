@@ -9,7 +9,7 @@ export const ToolExport: ToolDefinition = {
   schema: {
     id: z.string().describe("Template ID to delete"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       await printClient.delete(`/templates/${args.id}`);
       const mode = printClient.getModePrefix();

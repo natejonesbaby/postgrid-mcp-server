@@ -9,7 +9,7 @@ export const ToolExport: ToolDefinition = {
   schema: {
     id: z.string().describe("Bank account ID to delete"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       await printClient.delete(`/bank_accounts/${args.id}`);
       const mode = printClient.getModePrefix();

@@ -15,18 +15,18 @@ export const ToolExport: ToolDefinition = {
     countryCode: z.string().optional().describe("Country code (default: 'US')"),
     freeformAddress: z.string().optional().describe("Full address as a single string (alternative to structured fields)"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const body: Record<string, string> = {};
       if (args.freeformAddress) {
-        body.address = args.freeformAddress;
+        body.address = args.freeformAddress as string;
       } else {
-        if (args.line1) body.line1 = args.line1;
-        if (args.line2) body.line2 = args.line2;
-        if (args.city) body.city = args.city;
-        if (args.provinceOrState) body.provinceOrState = args.provinceOrState;
-        if (args.postalOrZip) body.postalOrZip = args.postalOrZip;
-        body.countryCode = args.countryCode || "US";
+        if (args.line1) body.line1 = args.line1 as string;
+        if (args.line2) body.line2 = args.line2 as string;
+        if (args.city) body.city = args.city as string;
+        if (args.provinceOrState) body.provinceOrState = args.provinceOrState as string;
+        if (args.postalOrZip) body.postalOrZip = args.postalOrZip as string;
+        body.countryCode = (args.countryCode as string | undefined) || "US";
       }
 
       const result = await verifyClient.post<any>("/verifications", body);

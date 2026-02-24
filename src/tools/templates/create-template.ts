@@ -11,7 +11,7 @@ export const ToolExport: ToolDefinition = {
     html: z.string().describe("HTML content with optional {{mergeVariable}} placeholders"),
     description: z.string().optional().describe("Template description/name for easy identification"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const template = await printClient.post<PostGridTemplate>("/templates", {
         html: args.html,

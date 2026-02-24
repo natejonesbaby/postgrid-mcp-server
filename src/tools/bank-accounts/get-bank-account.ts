@@ -10,7 +10,7 @@ export const ToolExport: ToolDefinition = {
   schema: {
     id: z.string().describe("Bank account ID (e.g., 'bank_account_xxx')"),
   },
-  handler: async (args: any) => {
+  handler: async (args: Record<string, unknown>) => {
     try {
       const account = await printClient.get<PostGridBankAccount>(`/bank_accounts/${args.id}`);
       const mode = printClient.getModePrefix();
